@@ -141,6 +141,34 @@ def mostrar_personajes(personajes)
 
 end
 
+def mostrar_caracteristicas(personaje, preguntas)
+    i = 1
+    puts personaje[0].upcase()
+    for preg in preguntas
+        case personaje[i]
+            when true
+                res = "Si"
+            when false
+                res = "No"
+            when "B"
+                res = "BLANCO"
+            when "N"
+                res = "NEGRO"
+            when "A"
+                res = "AMARILLO"
+            when "R"
+                res = "ROJO"
+            when "M"
+                res = "MARRON"
+            else
+                res = personaje[i]
+        end
+
+        print "#{preg[1]}#{res}\n"
+        i += 1
+    end
+end
+
 begin
     file = File.open("personajes.txt", "r")
     for line in file.readlines()
@@ -168,8 +196,23 @@ end
 
 #nuevo_personaje(personajes, preguntas)
 print personajes
-mostrar_personajes(personajes)
-print preguntas[0]
+
+
+loop do
+    mostrar_personajes(personajes)
+    print "\nIngrese la ID del personaje que quiera expandir. Ingrese -1 para cerrar: "
+    opt = gets.to_i
+    loop do
+        if opt >= -1 and (personajes[opt] != nil or opt == -1)
+            break
+        else
+            print "Ingrese una ID válida para continuar o -1 para cerrar: "
+            opt = gets.to_i
+        end
+    end
+    break if opt == -1
+    mostrar_caracteristicas(personajes[opt], preguntas)
+end
 
 begin
     file = File.open("personajes.txt", "w")
