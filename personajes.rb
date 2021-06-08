@@ -132,6 +132,63 @@ def nuevo_personaje(personajes, preguntas)
 
 end
 
+def mostrar_personajes(personajes)
+
+    for i in 0..personajes.length-1
+        print "\n" if i%4 == 0
+        print "%-3s: %-30s" % [ i, personajes[i][0] ]
+    end
+
+end
+
+def mostrar_caracteristicas(personaje, preguntas)
+    i = 1
+    print "\n#{personaje[0].upcase()}\n\n"
+    for preg in preguntas
+        case personaje[i]
+            when true
+                res = "SI"
+            when false
+                res = "NO"
+            when "B"
+                res = "BLANCO"
+            when "N"
+                res = "NEGRO"
+            when "A"
+                res = "AMARILLO"
+            when "R"
+                res = "ROJO"
+            when "M"
+                res = "MARRON" if preg[0] == :color_pelo
+                res = "MUJER" if preg[0] == :genero
+            when "H"
+                res = "HOMBRE"
+            else
+                res = personaje[i]
+        end
+
+        print "#{preg[1]}#{res}\n"
+        i += 1
+    end
+end
+
+def menu_personaje(personajes, preguntas)
+    loop do
+        mostrar_personajes(personajes)
+        print "\nIngrese la ID del personaje que quiera expandir. Ingrese -1 para volver al menú: "
+        opt = gets.to_i
+        loop do
+            if opt >= -1 and (personajes[opt] != nil or opt == -1)
+                break
+            else
+                print "Ingrese una ID válida para continuar o -1 para volver al menú: "
+                opt = gets.to_i
+            end
+        end
+        break if opt == -1
+        mostrar_caracteristicas(personajes[opt], preguntas)
+    end
+end
 
 begin
     file = File.open("personajes.txt", "r")
@@ -157,8 +214,32 @@ rescue => e
     puts e
 end
 
-nuevo_personaje(personajes, preguntas)
-puts personajes
+
+
+loop do
+
+    puts "\nMENU"
+    puts
+    puts "1 - CREAR PERSONAJE NUEVO"
+    puts "2 - MENU DE PERSONAJE"
+    puts "0 - CERRAR"
+    print "\nIngrese una opción: "
+    opt = gets.to_i
+
+    case opt
+        when 1
+            nuevo_personaje(personajes, preguntas)
+        when 2
+            menu_personaje(personajes, preguntas)
+        when 0
+            break
+        else
+            puts "Ingrese una opción válida."
+    end
+
+end
+
+print personajes
 
 begin
     file = File.open("personajes.txt", "w")
