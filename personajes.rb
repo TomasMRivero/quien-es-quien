@@ -18,6 +18,22 @@ preguntas = {
     :nariz_grande => "Tiene la nariz grande?(S/N): "
 }
 
+def pregunta_booleana(preg)
+    print preg;
+    loop do
+        res = gets.strip().upcase()
+        if  res[0] == "S" or res[0] == "N"
+            if  res[0] == "S"
+                return true
+            else
+                return false
+            end    
+            break
+        end
+        print "Error. Debe indicar S para si o N para no: "
+    end
+end
+
 def preguntas_descripcion(preguntas, personaje)
     for i in preguntas
     
@@ -37,19 +53,7 @@ def preguntas_descripcion(preguntas, personaje)
                 personaje.push(false)
                 next
             else
-                print i[1];
-                loop do
-                    res = gets.strip().upcase()
-                    if  res[0] == "S" or res[0] == "N"
-                        if  res[0] == "S"
-                            personaje.push(true)
-                        else
-                            personaje.push(false)
-                        end  
-                        break
-                    end
-                    print "Error. Debe indicar S para si o N para no: "
-                end
+                personaje.push(pregunta_booleana(i[1]));
             end
         when :color_pelo
             print i[1];
@@ -66,34 +70,10 @@ def preguntas_descripcion(preguntas, personaje)
                 personaje.push(false)
                 next
             else
-                print i[1];
-                loop do
-                    res = gets.strip().upcase()
-                    if  res[0] == "S" or res[0] == "N"
-                        if  res[0] == "S"
-                            personaje.push(true)
-                        else
-                            personaje.push(false)
-                        end  
-                        break
-                    end
-                    print "Error. Debe indicar S para si o N para no: "
-                end
+                personaje.push(pregunta_booleana(i[1]));
             end
         else
-            print i[1];
-            loop do
-                res = gets.strip().upcase()
-                if  res[0] == "S" or res[0] == "N"
-                    if  res[0] == "S"
-                        personaje.push(true)
-                    else
-                        personaje.push(false)
-                    end    
-                    break
-                end
-                print "Error. Debe indicar S para si o N para no: "
-            end
+            personaje.push(pregunta_booleana(i[1]));
         end
 
     end
@@ -105,10 +85,20 @@ def nuevo_personaje(personajes, preguntas)
 
     loop do
         print "Introduzca el nombre del personaje: "
-        nombre = gets.chomp()
+        nombre = gets.strip()
+        nombre_es_unico = 1
         if nombre.length() > 0
-            personaje.push(nombre)
-            break
+            for i in personajes
+                if nombre.upcase() == i[0].upcase();
+                print "Ya existe un personaje con ese nombre. Introduzca otro nombre.\n"
+                nombre_es_unico = 0
+                break
+                end          
+            end
+            if nombre_es_unico == 1
+                personaje.push(nombre)
+                break
+            end
         else
             print "Debe introducir un nombre.\n"
         end
@@ -119,8 +109,26 @@ def nuevo_personaje(personajes, preguntas)
     if !personaje[6] and !personaje[7]
         personaje[5] = false
     end
-    personajes.push(personaje)
 
+    es_igual = 0
+
+    for i in personajes
+        for j in 1..i.length-1
+            if i[j] != personaje[j]
+                es_igual = 0
+                break
+            end
+            es_igual = 1
+            igual_a = i[0]
+        end
+        break if es_igual == 1            
+    end
+
+    if es_igual == 1
+        puts "Tiene las mismas características que #{igual_a}. No se va a guardar."
+    else
+        personajes.push(personaje)
+    end
 
 end
 
@@ -150,7 +158,7 @@ rescue => e
 end
 
 nuevo_personaje(personajes, preguntas)
-print personajes
+puts personajes
 
 begin
     file = File.open("personajes.txt", "w")
