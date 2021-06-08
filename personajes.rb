@@ -138,11 +138,13 @@ def mostrar_personajes(personajes)
         print "\n" if i%4 == 0
         print "%-3s: %-30s" % [ i, personajes[i][0] ]
     end
+    puts
 
 end
 
-def mostrar_caracteristicas(personaje, preguntas)
+def mostrar_caracteristicas(personajes, opt, preguntas)
     i = 1
+    personaje = personajes[opt]
     print "\n#{personaje[0].upcase()}\n\n"
     for preg in preguntas
         case personaje[i]
@@ -170,9 +172,11 @@ def mostrar_caracteristicas(personaje, preguntas)
         print "#{preg[1]}#{res}\n"
         i += 1
     end
+    puts
+    menu_personaje(personajes, opt, preguntas)
 end
 
-def menu_personaje(personajes, preguntas)
+def menu_personajes(personajes, preguntas)
     loop do
         mostrar_personajes(personajes)
         print "\nIngrese la ID del personaje que quiera expandir. Ingrese -1 para volver al menú: "
@@ -186,9 +190,27 @@ def menu_personaje(personajes, preguntas)
             end
         end
         break if opt == -1
-        mostrar_caracteristicas(personajes[opt], preguntas)
+        mostrar_caracteristicas(personajes, opt, preguntas)
     end
 end
+
+def menu_personaje(personajes, i, preguntas)
+    loop do
+        print "Escriba BORRAR para eliminar a #{personajes[i][0]}. Escriba -1 para volver atrás: "
+        opt = gets.strip().upcase()
+        case opt
+        when "BORRAR"
+            personajes.delete_at(i)
+            break
+        when "-1"
+            break
+        else
+            print "\nOpción inválida. "
+        end
+    end
+end
+
+
 
 begin
     File.open("personajes.txt", "r") do |file|
@@ -230,7 +252,7 @@ loop do
         when 1
             nuevo_personaje(personajes, preguntas)
         when 2
-            menu_personaje(personajes, preguntas)
+            menu_personajes(personajes, preguntas)
         when 0
             break
         else
@@ -239,7 +261,7 @@ loop do
 
 end
 
-print personajes
+#print personajes
 
 begin
     File.open("personajes.txt", "w") do |file|
