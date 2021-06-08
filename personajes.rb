@@ -191,7 +191,7 @@ def menu_personaje(personajes, preguntas)
 end
 
 begin
-    file = File.open("personajes.txt", "r")
+    File.open("personajes.txt", "r") do |file|
     for line in file.readlines()
         import = line.split(';')
         personaje = Array.new
@@ -242,7 +242,7 @@ end
 print personajes
 
 begin
-    file = File.open("personajes.txt", "w")
+    File.open("personajes.txt", "w") do |file|
     for personaje in personajes
         for i in 0..personaje.length-1 
             if i != personaje.length-1
