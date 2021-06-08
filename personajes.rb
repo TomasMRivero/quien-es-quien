@@ -132,6 +132,14 @@ def nuevo_personaje(personajes, preguntas)
 
 end
 
+def mostrar_personajes(personajes)
+
+    for i in 0..personajes.length-1
+        print "\n" if i%4 == 0
+        print "%-3s: %-30s" % [ i, personajes[i][0] ]
+    end
+
+end
 
 begin
     file = File.open("personajes.txt", "r")
@@ -157,8 +165,11 @@ rescue => e
     puts e
 end
 
-nuevo_personaje(personajes, preguntas)
-puts personajes
+
+#nuevo_personaje(personajes, preguntas)
+print personajes
+mostrar_personajes(personajes)
+print preguntas[0]
 
 begin
     file = File.open("personajes.txt", "w")
