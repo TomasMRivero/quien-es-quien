@@ -143,7 +143,7 @@ end
 
 def mostrar_caracteristicas(personaje, preguntas)
     i = 1
-    puts personaje[0].upcase()
+    print "\n#{personaje[0].upcase()}\n\n"
     for preg in preguntas
         case personaje[i]
             when true
@@ -159,7 +159,10 @@ def mostrar_caracteristicas(personaje, preguntas)
             when "R"
                 res = "ROJO"
             when "M"
-                res = "MARRON"
+                res = "MARRON" if preg[0] == :color_pelo
+                res = "MUJER" if preg[0] == :genero
+            when "H"
+                res = "HOMBRE"
             else
                 res = personaje[i]
         end
@@ -215,7 +218,8 @@ end
 
 loop do
 
-    puts "MENU"
+    puts "\nMENU"
+    puts
     puts "1 - CREAR PERSONAJE NUEVO"
     puts "2 - MENU DE PERSONAJE"
     puts "0 - CERRAR"
