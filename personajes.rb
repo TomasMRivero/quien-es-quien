@@ -147,9 +147,9 @@ def mostrar_caracteristicas(personaje, preguntas)
     for preg in preguntas
         case personaje[i]
             when true
-                res = "Si"
+                res = "SI"
             when false
-                res = "No"
+                res = "NO"
             when "B"
                 res = "BLANCO"
             when "N"
@@ -166,6 +166,24 @@ def mostrar_caracteristicas(personaje, preguntas)
 
         print "#{preg[1]}#{res}\n"
         i += 1
+    end
+end
+
+def menu_personaje(personajes, preguntas)
+    loop do
+        mostrar_personajes(personajes)
+        print "\nIngrese la ID del personaje que quiera expandir. Ingrese -1 para volver al menú: "
+        opt = gets.to_i
+        loop do
+            if opt >= -1 and (personajes[opt] != nil or opt == -1)
+                break
+            else
+                print "Ingrese una ID válida para continuar o -1 para volver al menú: "
+                opt = gets.to_i
+            end
+        end
+        break if opt == -1
+        mostrar_caracteristicas(personajes[opt], preguntas)
     end
 end
 
@@ -194,25 +212,30 @@ rescue => e
 end
 
 
-#nuevo_personaje(personajes, preguntas)
-print personajes
-
 
 loop do
-    mostrar_personajes(personajes)
-    print "\nIngrese la ID del personaje que quiera expandir. Ingrese -1 para cerrar: "
+
+    puts "MENU"
+    puts "1 - CREAR PERSONAJE NUEVO"
+    puts "2 - MENU DE PERSONAJE"
+    puts "0 - CERRAR"
+    print "\nIngrese una opción: "
     opt = gets.to_i
-    loop do
-        if opt >= -1 and (personajes[opt] != nil or opt == -1)
+
+    case opt
+        when 1
+            nuevo_personaje(personajes, preguntas)
+        when 2
+            menu_personaje(personajes, preguntas)
+        when 0
             break
         else
-            print "Ingrese una ID válida para continuar o -1 para cerrar: "
-            opt = gets.to_i
-        end
+            puts "Ingrese una opción válida."
     end
-    break if opt == -1
-    mostrar_caracteristicas(personajes[opt], preguntas)
+
 end
+
+print personajes
 
 begin
     file = File.open("personajes.txt", "w")
